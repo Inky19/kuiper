@@ -3,7 +3,7 @@
 
 void keyPressed(sf::Keyboard::Key key, Ship *ship){
     switch (key){
-        case sf::Keyboard::Z :
+        case sf::Keyboard::Z:
             (*ship).setThrust(10000);
             break;
         case sf::Keyboard::Q:

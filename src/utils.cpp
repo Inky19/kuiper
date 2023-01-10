@@ -1,6 +1,7 @@
 #include <math.h>
 #include <random>
 #include "utils.hpp"
+#include <iostream>
 
 float degToRad(float angle){
     return (angle*2*M_PI)/360;
@@ -16,6 +17,7 @@ int randInt(int lower, int upper){
 sf::Vector2f getBorder(float angle, Frame *frame){
     float refAngle = fmod((angle + 45), 360);
     int size = (*frame).getSize();
+    std::cout << refAngle << std::endl;
     if (refAngle <= 90){
         return sf::Vector2f((size/2)*(1+tan(degToRad(angle))),0);
     } else if (refAngle <= 180){

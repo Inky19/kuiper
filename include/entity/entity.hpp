@@ -12,9 +12,14 @@ class Entity : public sf::Transformable{
         float angle;
         sf::Sprite sprite;
         Frame *frame;
+        sf::CircleShape hitbox;
+        
+        void setInFrame();
 
     public:
         virtual ~Entity() = 0;
+        virtual void update(float dt) = 0;
+        virtual void render(sf::RenderWindow * window) = 0;
         sf::Sprite getSprite();
 };
 

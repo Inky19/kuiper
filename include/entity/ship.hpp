@@ -11,6 +11,7 @@ class Ship : public Entity{
         void rotate(float a);
 
         void update(float dt);
+        void render(sf::RenderWindow * window);
 
         float getSpeed();
         float getDAngle();

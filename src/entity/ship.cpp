@@ -20,6 +20,7 @@ Ship::Ship(Frame *frame){
         (*texture).loadFromFile("assets/textures/ship.png");
         sprite.setOrigin(16,16);
         sprite.setTexture(*texture);
+        sprite.setRotation(angle);
     }
     pos = sf::Vector2f(frame->getOrigin().x+frame->getSize()/2,frame->getOrigin().y+frame->getSize()/2);
     sprite.setPosition(pos);
@@ -27,7 +28,13 @@ Ship::Ship(Frame *frame){
 
 void Ship::update(float dt){
     if (dAngle != 0){
-        angle = fmod(angle + dAngle*dt, 360);
+        angle += dAngle*dt;
+        if (angle > 0){
+            angle = fmod(angle, 360);
+        }else{
+            angle = 360 - fmod(-angle, 360);
+        }
+        
         sprite.setRotation(angle);
     }
     float v0X = (thrust/drag)*sin(degToRad(angle));
@@ -37,12 +44,11 @@ void Ship::update(float dt){
     vy = (vy-v0Y)*exp(-(drag/mass)*dt)+v0Y;
     pos.x += vx*dt;
     pos.y += vy*dt;
-    sf::Vector2i ori = (*frame).getOrigin();
-    if (pos.x < ori.x){pos.x = ori.x+frame->getSize();}
-    if (pos.x > ori.x+frame->getSize()){pos.x = ori.x;}
-    if (pos.y < ori.y){pos.y = ori.y+frame->getSize();}
-    if (pos.y > ori.y+frame->getSize()){pos.y = ori.y;}
-    sprite.setPosition(pos);
+    setInFrame();
+}
+
+void Ship::render(sf::RenderWindow * window){
+    window->draw(sprite);
 }
 
 

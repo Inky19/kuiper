@@ -4,10 +4,14 @@
 #include "utils.hpp"
 #include "entity.hpp"
 
-class Asteroid : private Entity{
+class Asteroid : public Entity{
+    private:
+        float spriteAngle;
+        int size;
     public:
         Asteroid(int m, Frame *frame);
-        void update();
+        void update(float dt);
+        void render(sf::RenderWindow * window);
 
 };
 

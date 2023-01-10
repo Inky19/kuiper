@@ -5,10 +5,19 @@
 #include "ship.hpp"
 #include "inputs.hpp"
 #include "entity.hpp"
+#include "asteroid.hpp"
 
-void render(sf::RenderWindow * window, std::vector<Entity *> * entities){
+void render(sf::RenderWindow * window, std::vector<Entity *> * entities, float dt){
     for (Entity* e : (* entities)){
-        (*window).draw((*e).getSprite());
+        (*e).update(dt);
+        (*e).render(window);
+    }
+}
+
+void generateAsteroids(std::vector<Entity *> * entities, Frame * frame){
+    for (int i=0; i<10; i++){
+        Asteroid * asteroid = new Asteroid(64, frame);
+        entities->push_back(asteroid);
     }
 }
 
@@ -20,6 +29,7 @@ int main(){
     Ship ship(&frame);
     std::vector<Entity *> entities;
     entities.push_back(&ship);
+    generateAsteroids(&entities, &frame);
     while (window.isOpen()){
         sf::Event event;
         dt = timer.restart().asSeconds();
@@ -47,11 +57,10 @@ int main(){
             }
         
         }
-        ship.update(dt);
         window.clear();
         
         window.draw(frame.getBorder());
-        render(&window, &entities);
+        render(&window, &entities, dt);
         
         window.display();
     }
