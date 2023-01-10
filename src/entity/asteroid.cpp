@@ -1,5 +1,6 @@
 #include "asteroid.hpp"
 #include "utils.hpp"
+#include "entity.hpp"
 
 Asteroid::Asteroid(int m, Frame *frame){
     this->frame = frame;

@@ -2,6 +2,7 @@
 #define ASTEROID_HPP
 #include <SFML/Graphics.hpp>
 #include "utils.hpp"
+#include "entity.hpp"
 
 class Asteroid : private Entity{
     public:

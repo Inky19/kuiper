@@ -2,6 +2,7 @@
 #define SHIP_HPP
 #include <SFML/Graphics.hpp>
 #include "utils.hpp"
+#include "entity.hpp"
 
 class Ship : public Entity{
     public:

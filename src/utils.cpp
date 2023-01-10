@@ -2,12 +2,6 @@
 #include <random>
 #include "utils.hpp"
 
-Entity::~Entity() {}; // Destructor from a child child class also calls destructor from super class (must be defined)
-
-sf::Sprite Entity::getSprite(){
-    return sprite;
-}
-
 float degToRad(float angle){
     return (angle*2*M_PI)/360;
 }

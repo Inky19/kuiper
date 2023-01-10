@@ -4,6 +4,7 @@
 #include "utils.hpp"
 #include "ship.hpp"
 #include "inputs.hpp"
+#include "entity.hpp"
 
 void render(sf::RenderWindow * window, std::vector<Entity *> * entities){
     for (Entity* e : (* entities)){

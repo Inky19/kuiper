@@ -1,5 +1,6 @@
 #include "ship.hpp"
 #include "utils.hpp"
+#include "entity.hpp"
 #include <math.h>
 #include <iostream>
 
