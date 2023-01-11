@@ -7,18 +7,36 @@
 #include "entity.hpp"
 #include "asteroid.hpp"
 
-void render(sf::RenderWindow * window, std::vector<Entity *> * entities, float dt){
+void render(sf::RenderWindow * window, std::vector<Entity *> * entities){
     for (Entity* e : (* entities)){
-        (*e).update(dt);
         (*e).render(window);
     }
 }
 
-void generateAsteroids(std::vector<Entity *> * entities, Frame * frame){
+void update(std::vector<Entity *> * entities, float dt){
+    for (Entity* e : (* entities)){
+        (*e).update(dt);
+    }
+}
+
+void collisions(std::vector<Asteroid *> * asteroids, Ship * ship){
+    for (int i=0 ; i<asteroids->size() ; i++){
+        for (int j=i+1 ; j<asteroids->size() ; j++){
+
+            (*asteroids)[i]->collide((*asteroids)[j]);
+            
+        }
+    }
+}
+
+std::vector<Asteroid *> generateAsteroids(std::vector<Entity *> * entities, Frame * frame){
+    std::vector<Asteroid *> asteroids;
     for (int i=0; i<10; i++){
         Asteroid * asteroid = new Asteroid(64, frame);
         entities->push_back(asteroid);
+        asteroids.push_back(asteroid);
     }
+    return asteroids;
 }
 
 int main(){
@@ -29,7 +47,7 @@ int main(){
     Ship ship(&frame);
     std::vector<Entity *> entities;
     entities.push_back(&ship);
-    generateAsteroids(&entities, &frame);
+    std::vector<Asteroid *> asteroids = generateAsteroids(&entities, &frame);
     while (window.isOpen()){
         sf::Event event;
         dt = timer.restart().asSeconds();
@@ -60,7 +78,9 @@ int main(){
         window.clear();
         
         window.draw(frame.getBorder());
-        render(&window, &entities, dt);
+        update(&entities, dt);
+        collisions(&asteroids, &ship);
+        render(&window, &entities);
         
         window.display();
     }

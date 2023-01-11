@@ -51,6 +51,9 @@ void Ship::render(sf::RenderWindow * window){
     window->draw(sprite);
 }
 
+void Ship::collide(Entity * entity){
+
+}
 
 void Ship::move(){
         

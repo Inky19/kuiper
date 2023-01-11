@@ -12,6 +12,7 @@ class Ship : public Entity{
 
         void update(float dt);
         void render(sf::RenderWindow * window);
+        void collide(Entity * entity);
 
         float getSpeed();
         float getDAngle();

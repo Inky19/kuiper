@@ -20,6 +20,7 @@ class Entity : public sf::Transformable{
         virtual ~Entity() = 0;
         virtual void update(float dt) = 0;
         virtual void render(sf::RenderWindow * window) = 0;
+        sf::Vector2f getPos();
         sf::Sprite getSprite();
 };
 

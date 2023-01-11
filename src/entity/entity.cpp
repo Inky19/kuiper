@@ -16,3 +16,7 @@ void Entity::setInFrame(){
     sprite.setPosition(pos);
     hitbox.setPosition(pos);
 }
+
+sf::Vector2f Entity::getPos(){
+    return pos;
+}

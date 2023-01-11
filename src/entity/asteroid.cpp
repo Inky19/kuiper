@@ -5,6 +5,7 @@
 
 Asteroid::Asteroid(int m, Frame *frame){
     this->frame = frame;
+    externalCollision = false;
     mass = m;
     size = 32;
     if (m <= 32){
@@ -34,12 +35,55 @@ Asteroid::Asteroid(int m, Frame *frame){
 void Asteroid::update(float dt){
     pos.x += speed*sin(angle)*dt;
     pos.y += -speed*cos(angle)*dt;
-    spriteAngle += dt*20;
+    spriteAngle = fmod(spriteAngle + dt*20, 360);
     sprite.setRotation(spriteAngle);
     setInFrame();
+    if (ongoingCollisions.size() > 0 || externalCollision){
+        hitbox.setFillColor(sf::Color(0,255,0,128));
+    } else {
+        hitbox.setFillColor(sf::Color(255,0,0,128));
+    }
+    Asteroid * ast;
+    for (int i=0; i<newCollisions.size(); i++){
+        ongoingCollisions.push_back(newCollisions[i]);
+    }
+    newCollisions.clear();
+    externalCollision = false;
 }
 
 void Asteroid::render(sf::RenderWindow * window){
     window->draw(hitbox);
     window->draw(sprite);
+}
+
+void Asteroid::collide(Asteroid * asteroid){
+    sf::Vector2f pos2 = asteroid->getPos();
+    float distX = pos.x - pos2.x;
+    float distY = pos.y-pos2.y;
+    float distance = distX*distX + distY*distY;
+    int maxDistance = (size+asteroid->getSize())/2;
+    bool colliding = false;
+    int index = -1;
+    for (int i = 0; i<ongoingCollisions.size(); i++){
+        if (ongoingCollisions[i] == asteroid){
+            colliding = true;
+            asteroid->setExternalColliding(true);
+            index = i;
+            break;
+        }
+    }
+    bool intersect = distance < maxDistance*maxDistance;
+    if (intersect && !colliding){
+        newCollisions.push_back(asteroid);
+    } else if (!intersect && colliding){
+        ongoingCollisions.erase(ongoingCollisions.begin() + index);
+    }
+}
+
+void Asteroid::setExternalColliding(bool colliding){
+    externalCollision = colliding;
+}
+
+int Asteroid::getSize(){
+    return size;
 }
