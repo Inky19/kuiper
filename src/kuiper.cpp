@@ -1,38 +1,41 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
+#include <memory>
 #include "utils.hpp"
 #include "ship.hpp"
 #include "inputs.hpp"
 #include "entity.hpp"
 #include "asteroid.hpp"
 
-void render(sf::RenderWindow * window, std::vector<Entity *> * entities){
-    for (Entity* e : (* entities)){
+void render(sf::RenderWindow * window, std::vector<std::shared_ptr<Entity>> * entities){
+    for (std::shared_ptr<Entity> e : (* entities)){
         (*e).render(window);
     }
 }
 
-void update(std::vector<Entity *> * entities, float dt){
-    for (Entity* e : (* entities)){
+void update(std::vector<std::shared_ptr<Entity>> * entities, float dt){
+    for (std::shared_ptr<Entity> e : (* entities)){
         (*e).update(dt);
     }
 }
 
-void collisions(std::vector<Asteroid *> * asteroids, Ship * ship){
+void collisions(std::vector<std::shared_ptr<Asteroid>> * asteroids, std::shared_ptr<Ship> * ship){
+    float distX; float distY; float distance;
+    int maxDistance;
+    sf::Vector2f pos;
+    sf::Vector2f pos2;
     for (int i=0 ; i<asteroids->size() ; i++){
         for (int j=i+1 ; j<asteroids->size() ; j++){
-
-            (*asteroids)[i]->collide((*asteroids)[j]);
-            
+            (*asteroids)[i]->collide(&(*asteroids)[j]);
         }
     }
 }
 
-std::vector<Asteroid *> generateAsteroids(std::vector<Entity *> * entities, Frame * frame){
-    std::vector<Asteroid *> asteroids;
+std::vector<std::shared_ptr<Asteroid>> generateAsteroids(std::vector<std::shared_ptr<Entity>> * entities, Frame * frame){
+    std::vector<std::shared_ptr<Asteroid>> asteroids;
     for (int i=0; i<10; i++){
-        Asteroid * asteroid = new Asteroid(64, frame);
+        std::shared_ptr<Asteroid> asteroid = std::make_shared<Asteroid>(64, frame);
         entities->push_back(asteroid);
         asteroids.push_back(asteroid);
     }
@@ -44,10 +47,11 @@ int main(){
     float dt = 0;
     sf::RenderWindow window(sf::VideoMode(1000, 1000), "Kuiper");
     Frame frame(1000);
-    Ship ship(&frame);
-    std::vector<Entity *> entities;
-    entities.push_back(&ship);
-    std::vector<Asteroid *> asteroids = generateAsteroids(&entities, &frame);
+    std::shared_ptr<Ship> ship = std::make_shared<Ship>(&frame);
+    std::vector<std::shared_ptr<Entity>> entities;
+    entities.push_back(ship);
+    std::vector<std::shared_ptr<Asteroid>> asteroids = generateAsteroids(&entities, &frame);
+
     while (window.isOpen()){
         sf::Event event;
         dt = timer.restart().asSeconds();
@@ -58,7 +62,7 @@ int main(){
                     break;
                 case sf::Event::KeyPressed:
                     if (event.key.code == sf::Keyboard::T){
-                        ship.toBorder();
+                        ship->toBorder();
                     }
                     keyPressed(event.key.code, &ship);
                     break;

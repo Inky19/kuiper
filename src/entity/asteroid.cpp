@@ -1,6 +1,7 @@
 #include "asteroid.hpp"
 #include "utils.hpp"
 #include "entity.hpp"
+#include <memory>
 #include <math.h>
 
 Asteroid::Asteroid(int m, Frame *frame){
@@ -56,25 +57,25 @@ void Asteroid::render(sf::RenderWindow * window){
     window->draw(sprite);
 }
 
-void Asteroid::collide(Asteroid * asteroid){
-    sf::Vector2f pos2 = asteroid->getPos();
+void Asteroid::collide(std::shared_ptr<Asteroid> * asteroid){
+    sf::Vector2f pos2 = (*asteroid)->getPos();
     float distX = pos.x - pos2.x;
     float distY = pos.y-pos2.y;
     float distance = distX*distX + distY*distY;
-    int maxDistance = (size+asteroid->getSize())/2;
+    int maxDistance = (size+(*asteroid)->getSize())/2;
     bool colliding = false;
     int index = -1;
     for (int i = 0; i<ongoingCollisions.size(); i++){
-        if (ongoingCollisions[i] == asteroid){
+        if (((ongoingCollisions[i].lock())) == (*asteroid)){
             colliding = true;
-            asteroid->setExternalColliding(true);
+            (*asteroid)->setExternalColliding(true);
             index = i;
             break;
         }
     }
     bool intersect = distance < maxDistance*maxDistance;
     if (intersect && !colliding){
-        newCollisions.push_back(asteroid);
+        newCollisions.push_back(std::weak_ptr<Asteroid>((*asteroid)));
     } else if (!intersect && colliding){
         ongoingCollisions.erase(ongoingCollisions.begin() + index);
     }
