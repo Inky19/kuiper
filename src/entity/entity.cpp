@@ -6,7 +6,9 @@ sf::Sprite Entity::getSprite(){
     return sprite;
 }
 
-// Set the entity to stay in frame (the entity repear on the other side of the frame)
+/**
+ * Set the entity to stay in frame (the entity repear on the other side of the frame)
+ */
 void Entity::setInFrame(){
     sf::Vector2i ori = (*frame).getOrigin();
     if (pos.x < ori.x){pos.x = ori.x+frame->getSize();}
@@ -19,4 +21,12 @@ void Entity::setInFrame(){
 
 sf::Vector2f Entity::getPos(){
     return pos;
+}
+
+float Entity::getAngle(){
+    return angle;
+}
+
+void Entity::setAngle(float angle){
+    this->angle = angle;
 }

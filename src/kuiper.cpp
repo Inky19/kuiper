@@ -21,13 +21,9 @@ void update(std::vector<std::shared_ptr<Entity>> * entities, float dt){
 }
 
 void collisions(std::vector<std::shared_ptr<Asteroid>> * asteroids, std::shared_ptr<Ship> * ship){
-    float distX; float distY; float distance;
-    int maxDistance;
-    sf::Vector2f pos;
-    sf::Vector2f pos2;
     for (int i=0 ; i<asteroids->size() ; i++){
         for (int j=i+1 ; j<asteroids->size() ; j++){
-            (*asteroids)[i]->collide(&(*asteroids)[j]);
+            Asteroid::collide(&(*asteroids)[i], &(*asteroids)[j]);
         }
     }
 }

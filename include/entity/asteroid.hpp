@@ -7,19 +7,18 @@
 
 class Asteroid : public Entity{
     private:
-        float spriteAngle;
-        int size;
-        std::vector<std::weak_ptr<Asteroid>> ongoingCollisions;
-        std::vector<std::weak_ptr<Asteroid>> newCollisions;
-        bool externalCollision;
+        float spriteAngle; // Angle of the sprite used to make the asteroid rotate
+        int size; // Size of the sprite
+        std::vector<std::weak_ptr<Asteroid>> ongoingCollisions; // Current collisions (a collision can last multiple frames)
     public:
         Asteroid(int m, Frame *frame);
         void update(float dt);
         void render(sf::RenderWindow * window);
-        void collide(std::shared_ptr<Asteroid> * asteroid);
+        static void collide(std::shared_ptr<Asteroid> * asteroid1, std::shared_ptr<Asteroid> * asteroid2);
         int getSize();
-        void setExternalColliding(bool colliding);
-
+        void addCollision(std::shared_ptr<Asteroid> * asteroid);
+        void removeCollision(std::shared_ptr<Asteroid> * asteroid);
+        int checkCollision(std::shared_ptr<Asteroid> * asteroid);
 };
 
 #endif

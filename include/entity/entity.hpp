@@ -22,6 +22,8 @@ class Entity : public sf::Transformable{
         virtual void render(sf::RenderWindow * window) = 0;
         sf::Vector2f getPos();
         sf::Sprite getSprite();
+        float getAngle();
+        void setAngle(float angle);
 };
 
 #endif
