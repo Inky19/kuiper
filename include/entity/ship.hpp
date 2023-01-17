@@ -14,6 +14,7 @@ class Ship : public Entity{
         void render(sf::RenderWindow * window);
         void collide(Entity * entity);
 
+        sf::Vector2f getSpeedVector();
         float getSpeed();
         float getDAngle();
         void setDAngle(float angle);
@@ -21,7 +22,10 @@ class Ship : public Entity{
         void setThrust(float thrust);
         void toBorder();
         void center();
+        bool isFiring();
+        void setFiring(bool firing);
     private:
+        bool firing;
         float vx;
         float vy;
         int thrust;

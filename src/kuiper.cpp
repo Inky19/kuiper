@@ -6,6 +6,7 @@
 #include "ship.hpp"
 #include "inputs.hpp"
 #include "entity.hpp"
+#include "laser.hpp"
 #include "asteroid.hpp"
 
 void render(sf::RenderWindow * window, std::vector<std::shared_ptr<Entity>> * entities){
@@ -14,9 +15,18 @@ void render(sf::RenderWindow * window, std::vector<std::shared_ptr<Entity>> * en
     }
 }
 
-void update(std::vector<std::shared_ptr<Entity>> * entities, float dt){
+void fire(std::shared_ptr<Ship> * ship, std::vector<std::shared_ptr<Entity>> * entities, Frame * frame){
+    std::shared_ptr<Laser> laser = std::make_shared<Laser>((*ship)->getAngle(), (*ship)->getPos(), (*ship)->getSpeedVector(), frame);
+    (*ship)->setFiring(false);
+    entities->push_back(laser);
+}
+
+void update(std::vector<std::shared_ptr<Entity>> * entities, std::shared_ptr<Ship> * ship, float dt, Frame * frame){
     for (std::shared_ptr<Entity> e : (* entities)){
         (*e).update(dt);
+    }
+    if((*ship)->isFiring()){
+        fire(ship, entities, frame);
     }
 }
 
@@ -45,6 +55,7 @@ int main(){
     Frame frame(1000);
     std::shared_ptr<Ship> ship = std::make_shared<Ship>(&frame);
     std::vector<std::shared_ptr<Entity>> entities;
+    //std::vector<std::vector<std::shared_ptr<Entity>>> entities; TODO : Make entities sorted by list index
     entities.push_back(ship);
     std::vector<std::shared_ptr<Asteroid>> asteroids = generateAsteroids(&entities, &frame);
 
@@ -60,10 +71,10 @@ int main(){
                     if (event.key.code == sf::Keyboard::T){
                         ship->toBorder();
                     }
-                    keyPressed(event.key.code, &ship);
+                    InputProcessor::keyPressed(event.key.code, &ship);
                     break;
                 case sf::Event::KeyReleased:
-                    keyReleased(event.key.code, &ship);
+                    InputProcessor::keyReleased(event.key.code, &ship);
                     break;
                 case sf::Event::Resized:
                     sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
@@ -78,7 +89,7 @@ int main(){
         window.clear();
         
         window.draw(frame.getBorder());
-        update(&entities, dt);
+        update(&entities, &ship, dt, &frame);
         collisions(&asteroids, &ship);
         render(&window, &entities);
         

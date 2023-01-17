@@ -1,6 +1,7 @@
 #include "asteroid.hpp"
 #include "utils.hpp"
 #include "entity.hpp"
+#include "assetsLoader.hpp"
 #include <memory>
 #include <math.h>
 
@@ -19,10 +20,13 @@ Asteroid::Asteroid(int m, Frame *frame){
     // These values need to be the same as the one in the texture files.
     if (m <= 32){
         size = 32;
+        sprite.setTexture(Assets::asteroid32);
     } else if (m <= 64){
         size = 64;
+        sprite.setTexture(Assets::asteroid64);
     } else {
         size = 128;
+        sprite.setTexture(Assets::asteroid128);
     }
     
     hitbox = sf::CircleShape(size/2);
@@ -35,14 +39,7 @@ Asteroid::Asteroid(int m, Frame *frame){
     speed = 100;
     pos = getBorder(angle, frame); // The asteroid is placed at the border of the frame at the start of the game.
 
-    if (sprite.getTexture() == nullptr){ // Load texture
-        sf::Texture *texture = new sf::Texture;
-        //TODO: texture statique ?
-        // The texture file 
-        (*texture).loadFromFile("assets/textures/aste" + std::to_string(size) + ".png");
-        sprite.setTexture(*texture);
-        sprite.setRotation(spriteAngle);
-    }
+    sprite.setRotation(spriteAngle);
 }
 
 /**

@@ -1,11 +1,14 @@
 #include "ship.hpp"
 #include "utils.hpp"
 #include "entity.hpp"
+#include "assetsLoader.hpp"
+#include "laser.hpp"
 #include <math.h>
 #include <iostream>
 
 Ship::Ship(Frame *frame){
     this->frame = frame;
+    firing = false;
     mass = 10;
     angle = 0;
     speed = 10;
@@ -16,10 +19,8 @@ Ship::Ship(Frame *frame){
     vx = 0;
     vy = 0;
     if (sprite.getTexture() == nullptr){
-        sf::Texture *texture = new sf::Texture;
-        (*texture).loadFromFile("assets/textures/ship.png");
         sprite.setOrigin(16,16);
-        sprite.setTexture(*texture);
+        sprite.setTexture(Assets::shipTexture);
         sprite.setRotation(angle);
     }
     pos = sf::Vector2f(frame->getOrigin().x+frame->getSize()/2,frame->getOrigin().y+frame->getSize()/2);
@@ -45,6 +46,18 @@ void Ship::update(float dt){
     pos.x += vx*dt;
     pos.y += vy*dt;
     setInFrame();
+}
+
+void Ship::setFiring(bool firing){
+    this->firing = firing;
+}
+
+bool Ship::isFiring(){
+    return firing;
+}
+
+sf::Vector2f Ship::getSpeedVector(){
+    return sf::Vector2f(vx,vy);
 }
 
 void Ship::render(sf::RenderWindow * window){
