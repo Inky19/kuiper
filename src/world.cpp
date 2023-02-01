@@ -2,6 +2,7 @@
 #include "inputs.hpp"
 #include <iostream>
 #include <memory>
+#include <vector>
 
 std::vector<std::vector<std::shared_ptr<Entity>>>  World::Entities::getAllEntities(){
     std::vector<std::vector<std::shared_ptr<Entity>>> ent;
@@ -25,7 +26,7 @@ void World::render(){
     (*window).clear();
         
     (*window).draw(frame.getBorder());
-    collisions();
+    
     
     for (std::vector<std::shared_ptr<Entity>> arr : entities.getAllEntities()){
         for (std::shared_ptr<Entity> e : arr){
@@ -75,15 +76,27 @@ void World::update(float dt, sf::Event * event){
     if(ship->isFiring()){
         fire();
     }
+    updateEntities();
     render();
 }
 
+void World::updateEntities(){
+    std::erase_if(entities.lasers, [](const std::shared_ptr<Laser>& laser){return laser->isExpired();});
+    
+    collisions();
+}
 
 void World::collisions(){
     
     for (int i=0 ; i<entities.asteroids.size() ; i++){
         for (int j=i+1 ; j<entities.asteroids.size() ; j++){
             Asteroid::collide(&(entities.asteroids)[i], &(entities.asteroids)[j]);
+        }
+    }
+
+    for (std::shared_ptr<Laser> laser : entities.lasers){
+        for (std::shared_ptr<Asteroid> asteroid : entities.asteroids){
+            laser->collide(&asteroid);
         }
     }
     

@@ -14,7 +14,7 @@ class Entity : public sf::Transformable{
         Frame *frame;
         sf::CircleShape hitbox;
         
-        void setInFrame();
+        void setInFrame(bool setPosHitbox = true);
 
     public:
         virtual ~Entity() = 0;
