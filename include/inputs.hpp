@@ -12,8 +12,8 @@ class InputProcessor{
         inline static bool pressingLeft = false;
         inline static bool pressingRight = false;
     public:
-        static void keyPressed(sf::Keyboard::Key key, std::shared_ptr<Ship> *ship);
-        static void keyReleased(sf::Keyboard::Key key, std::shared_ptr<Ship> *ship);
+        static void keyPressed(sf::Keyboard::Key key, std::vector<std::shared_ptr<Ship>> *ships);
+        static void keyReleased(sf::Keyboard::Key key, std::vector<std::shared_ptr<Ship>> *ships);
 };
 
 #endif

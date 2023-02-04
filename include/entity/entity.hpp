@@ -13,13 +13,14 @@ class Entity : public sf::Transformable{
         sf::Sprite sprite;
         Frame *frame;
         sf::CircleShape hitbox;
+        int size; // Size of the sprite
         
         void setInFrame(bool setPosHitbox = true);
 
     public:
         virtual ~Entity() = 0;
         virtual void update(float dt) = 0;
-        virtual void render(sf::RenderWindow * window) = 0;
+        virtual void render(sf::RenderWindow * window, bool debug = false) = 0;
         sf::Vector2f getPos();
         sf::Sprite getSprite();
         float getAngle();

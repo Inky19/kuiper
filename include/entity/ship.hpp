@@ -3,16 +3,17 @@
 #include <SFML/Graphics.hpp>
 #include "utils.hpp"
 #include "entity.hpp"
+#include <memory>
+#include "asteroid.hpp"
 
 class Ship : public Entity{
     public:
         Ship(Frame * frame);
         void move();
         void rotate(float a);
-
+        void render(sf::RenderWindow * window, bool debug = false);
         void update(float dt);
-        void render(sf::RenderWindow * window);
-        void collide(Entity * entity);
+        void collide(std::shared_ptr<Asteroid> * asteroid);
 
         sf::Vector2f getSpeedVector();
         float getSpeed();
@@ -24,6 +25,7 @@ class Ship : public Entity{
         void center();
         bool isFiring();
         void setFiring(bool firing);
+        bool isCollided();
     private:
         bool firing;
         float vx;
@@ -31,6 +33,10 @@ class Ship : public Entity{
         int thrust;
         float propx;
         float propy;
+        bool collided;
+
+        sf::Vector2f hitboxPoints[3];
+
         static const int maxSpeed = 10;
         static const int drag = 20;
         void updateSprite();

@@ -24,14 +24,16 @@ class World {
                 std::vector<std::vector<std::shared_ptr<Entity>>> getAllEntities();
         };
         
+        bool debug;
+        bool over;
         Entities entities;
         sf::RenderWindow  * window;
         Frame frame = Frame(1000);
-        std::shared_ptr<Ship> ship = std::make_shared<Ship>(&frame);
+        
         
         void collisions();
         void render();
-        void fire();
+        void fire(std::shared_ptr<Ship> * ship);
         void generateAsteroids();
         void updateEntities();
 

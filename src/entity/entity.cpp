@@ -7,7 +7,8 @@ sf::Sprite Entity::getSprite(){
 }
 
 /**
- * Set the entity to stay in frame (the entity repear on the other side of the frame)
+ * Set the entity and its sprite to stay in frame (the entity repear on the other side of the frame)
+ * @param setPosHitbox Also set the hitbox in frame. Default is true.
  */
 void Entity::setInFrame(bool setPosHitbox){
     sf::Vector2i ori = (*frame).getOrigin();

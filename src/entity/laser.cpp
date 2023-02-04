@@ -51,13 +51,18 @@ bool Laser::collide(std::shared_ptr<Asteroid> * asteroid){
     float maxDistance = (*asteroid)->getSize()/2;
     if (distance < maxDistance*maxDistance){
         hitbox.setFillColor(sf::Color(255,255,0,128));
+        expired = true;
+        return true;
     }
     return false;
 }
 
-void Laser::render(sf::RenderWindow * window){
+void Laser::render(sf::RenderWindow * window, bool debug){
     (*window).draw(sprite);
-    (*window).draw(hitbox);
+    if (debug){
+        (*window).draw(hitbox);
+    }
+    
 }
 
 bool Laser::isExpired(){

@@ -66,9 +66,19 @@ void Asteroid::update(float dt){
     }
 }
 
-void Asteroid::render(sf::RenderWindow * window){
-    window->draw(hitbox);
+void Asteroid::eraseCollisions(std::shared_ptr<Asteroid> * asteroid){
+    for (std::weak_ptr<Asteroid> astr : ongoingCollisions){
+        astr.lock()->removeCollision(asteroid);
+    }
+}
+
+void Asteroid::render(sf::RenderWindow * window, bool debug){
+    
     window->draw(sprite);
+
+    if (debug){
+        window->draw(hitbox);
+    }
 }
 
 /**

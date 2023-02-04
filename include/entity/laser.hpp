@@ -18,7 +18,7 @@ class Laser : public Entity{
     public:
         Laser(float angle, sf::Vector2f pos, sf::Vector2f initialSpeed, Frame * frame);
         void update(float dt);
-        void render(sf::RenderWindow * window);
+        void render(sf::RenderWindow * window, bool debug = false);
         bool isExpired();
         bool collide(std::shared_ptr<Asteroid> * asteroid);
         

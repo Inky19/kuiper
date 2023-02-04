@@ -9,6 +9,7 @@
 Ship::Ship(Frame *frame){
     this->frame = frame;
     firing = false;
+    collided = false;
     mass = 10;
     angle = 0;
     speed = 10;
@@ -19,12 +20,19 @@ Ship::Ship(Frame *frame){
     vx = 0;
     vy = 0;
     if (sprite.getTexture() == nullptr){
-        sprite.setOrigin(16,16);
+        
         sprite.setTexture(Assets::shipTexture);
+        size = (sprite.getTexture()->getSize()).x;
+        sprite.setOrigin(size/2,size/2);
         sprite.setRotation(angle);
     }
     pos = sf::Vector2f(frame->getOrigin().x+frame->getSize()/2,frame->getOrigin().y+frame->getSize()/2);
     sprite.setPosition(pos);
+    hitbox = sf::CircleShape(6);
+    hitbox.setOrigin(6,6);
+    hitbox.setFillColor(sf::Color(255,0,255,128));
+    hitbox.setOutlineThickness(0);
+
 }
 
 void Ship::update(float dt){
@@ -46,6 +54,12 @@ void Ship::update(float dt){
     pos.x += vx*dt;
     pos.y += vy*dt;
     setInFrame();
+
+    hitbox.setFillColor(sf::Color(255,0,255,128));
+    int hitboxRadius = (size-2)/2;
+    hitboxPoints[0] = sf::Vector2f(sin(degToRad(angle))*hitboxRadius,-cos(degToRad(angle))*hitboxRadius);
+    hitboxPoints[1] = sf::Vector2f(sin(degToRad(angle+130))*hitboxRadius,-cos(degToRad(angle+130))*hitboxRadius);
+    hitboxPoints[2] = sf::Vector2f(sin(degToRad(angle+240))*hitboxRadius,-cos(degToRad(angle+240))*hitboxRadius);
 }
 
 void Ship::setFiring(bool firing){
@@ -60,12 +74,34 @@ sf::Vector2f Ship::getSpeedVector(){
     return sf::Vector2f(vx,vy);
 }
 
-void Ship::render(sf::RenderWindow * window){
+void Ship::render(sf::RenderWindow * window, bool debug){
     window->draw(sprite);
+    if (debug){
+        window->draw(hitbox);
+        for (int i=0; i<3.; i++){
+        sf::CircleShape circle = sf::CircleShape(4);
+        circle.setPosition(pos+hitboxPoints[i]);
+        circle.setOrigin(4,4);
+        circle.setFillColor(sf::Color(255,255,0,128));
+        window->draw((circle));
+    }
+    
+    }
 }
 
-void Ship::collide(Entity * entity){
-
+void Ship::collide(std::shared_ptr<Asteroid> * asteroid){
+    for (int i=0; i<3.; i++){
+        sf::Vector2f posAstr = (*asteroid)->getPos();
+        float distX = posAstr.x - (pos.x +hitboxPoints[i].x);
+        float distY = posAstr.y - (pos.y +hitboxPoints[i].y);
+        float distance = distX*distX + distY*distY;
+        int maxDistance = (*asteroid)->getSize()/2;
+        bool colliding = distance < maxDistance*maxDistance;
+        if (colliding){
+            hitbox.setFillColor(sf::Color(255,255,255,128));
+            collided = true;
+        }
+    } 
 }
 
 void Ship::move(){
@@ -113,4 +149,8 @@ float Ship::getThrust(){
 
 void Ship::setThrust(float thr){
     thrust = thr;
+}
+
+bool Ship::isCollided(){
+    return collided;
 }
