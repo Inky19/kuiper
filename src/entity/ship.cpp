@@ -17,6 +17,7 @@ Ship::Ship(Frame *frame){
     propy = 0;
     dAngle = 0;
     thrust = 0;
+    animationTimer = 0;
     vx = 0;
     vy = 0;
     if (sprite.getTexture() == nullptr){
@@ -48,18 +49,38 @@ void Ship::update(float dt){
     }
     float v0X = (thrust/drag)*sin(degToRad(angle));
     float v0Y = -(thrust/drag)*cos(degToRad(angle));
-    
+
     vx = (vx-v0X)*exp(-(drag/mass)*dt)+v0X;
     vy = (vy-v0Y)*exp(-(drag/mass)*dt)+v0Y;
     pos.x += vx*dt;
     pos.y += vy*dt;
     setInFrame();
-
+    updateSprite(dt);
     hitbox.setFillColor(sf::Color(255,0,255,128));
     int hitboxRadius = (size-2)/2;
     hitboxPoints[0] = sf::Vector2f(sin(degToRad(angle))*hitboxRadius,-cos(degToRad(angle))*hitboxRadius);
     hitboxPoints[1] = sf::Vector2f(sin(degToRad(angle+130))*hitboxRadius,-cos(degToRad(angle+130))*hitboxRadius);
     hitboxPoints[2] = sf::Vector2f(sin(degToRad(angle+240))*hitboxRadius,-cos(degToRad(angle+240))*hitboxRadius);
+}
+
+void Ship::updateSprite(float dt){
+    if (thrust>0){
+        animationTimer += dt;
+        if (animationTimer < 0.04){
+            sprite.setTexture(Assets::shipThurster0);
+        } else if (animationTimer < 0.08){
+            sprite.setTexture(Assets::shipThurster1);
+        } else if (animationTimer < 0.12){
+            sprite.setTexture(Assets::shipThurster2);
+        } else if (animationTimer < 0.16) {
+            sprite.setTexture(Assets::shipThurster3);
+        } else {
+            animationTimer = 0;
+        }
+        
+    } else {
+        sprite.setTexture(Assets::shipTexture);
+    }
 }
 
 void Ship::setFiring(bool firing){
@@ -89,7 +110,7 @@ void Ship::render(sf::RenderWindow * window, bool debug){
     }
 }
 
-void Ship::collide(std::shared_ptr<Asteroid> * asteroid){
+bool Ship::collide(std::shared_ptr<Asteroid> * asteroid){
     for (int i=0; i<3.; i++){
         sf::Vector2f posAstr = (*asteroid)->getPos();
         float distX = posAstr.x - (pos.x +hitboxPoints[i].x);
@@ -100,8 +121,10 @@ void Ship::collide(std::shared_ptr<Asteroid> * asteroid){
         if (colliding){
             hitbox.setFillColor(sf::Color(255,255,255,128));
             collided = true;
+            return true;
         }
     } 
+    return false;
 }
 
 void Ship::move(){

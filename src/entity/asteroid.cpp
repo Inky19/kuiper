@@ -66,6 +66,12 @@ void Asteroid::update(float dt){
     }
 }
 
+/**
+ * Tell all asteroids that have an ongoing collision with this one to delete it.
+ * This is used before deleting an asteroid, to prevent invalid collisions.
+ * 
+ * @param asteroid Shared pointer of this asteroid that will be passed to the others
+*/
 void Asteroid::eraseCollisions(std::shared_ptr<Asteroid> * asteroid){
     for (std::weak_ptr<Asteroid> astr : ongoingCollisions){
         astr.lock()->removeCollision(asteroid);
@@ -115,7 +121,10 @@ void Asteroid::collide(std::shared_ptr<Asteroid> * asteroid1, std::shared_ptr<As
     }    
 }
 
-// 
+/**
+ * Declare a new collision.
+ * @param asteroid New asteroid to add
+*/
 void Asteroid::addCollision(std::shared_ptr<Asteroid> * asteroid){
     std::weak_ptr<Asteroid> * smartWeak = new std::weak_ptr<Asteroid>(*asteroid);
     ongoingCollisions.push_back((*smartWeak));

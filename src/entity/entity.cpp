@@ -27,6 +27,10 @@ sf::Vector2f Entity::getPos(){
     return pos;
 }
 
+void Entity::setPos(sf::Vector2f pos){
+    this->pos = pos;
+}
+
 float Entity::getAngle(){
     return angle;
 }

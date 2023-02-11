@@ -25,6 +25,7 @@ class Entity : public sf::Transformable{
         sf::Sprite getSprite();
         float getAngle();
         void setAngle(float angle);
+        void setPos(sf::Vector2f pos);
 };
 
 #endif

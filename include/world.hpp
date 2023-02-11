@@ -9,6 +9,7 @@
 #include "ship.hpp"
 #include "asteroid.hpp"
 #include "laser.hpp"
+#include "debris.hpp"
 
 class World {
     public:
@@ -21,6 +22,7 @@ class World {
                 std::vector<std::shared_ptr<Ship>> ships;
                 std::vector<std::shared_ptr<Asteroid>> asteroids;
                 std::vector<std::shared_ptr<Laser>> lasers;
+                std::vector<std::shared_ptr<Debris>> debris;
                 std::vector<std::vector<std::shared_ptr<Entity>>> getAllEntities();
         };
         
@@ -35,6 +37,8 @@ class World {
         void render();
         void fire(std::shared_ptr<Ship> * ship);
         void generateAsteroids();
+        void generateAsteroids(int number, int size);
+        void generateAsteroids(int number, int size, sf::Vector2f pos);
         void updateEntities();
 
 };

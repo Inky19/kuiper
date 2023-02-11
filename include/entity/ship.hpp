@@ -13,7 +13,7 @@ class Ship : public Entity{
         void rotate(float a);
         void render(sf::RenderWindow * window, bool debug = false);
         void update(float dt);
-        void collide(std::shared_ptr<Asteroid> * asteroid);
+        bool collide(std::shared_ptr<Asteroid> * asteroid);
 
         sf::Vector2f getSpeedVector();
         float getSpeed();
@@ -34,12 +34,13 @@ class Ship : public Entity{
         float propx;
         float propy;
         bool collided;
+        float animationTimer;
 
         sf::Vector2f hitboxPoints[3];
 
         static const int maxSpeed = 10;
         static const int drag = 20;
-        void updateSprite();
+        void updateSprite(float dt);
         
         float dAngle;
 };
