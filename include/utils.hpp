@@ -23,5 +23,4 @@ class Frame{
 };
 
 sf::Vector2f getBorder(float angle, Frame *frame);
-
 #endif

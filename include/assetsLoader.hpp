@@ -5,7 +5,6 @@
 
 class Assets{
     public:
-        Assets();
         static const sf::Texture shipTexture;
         static const sf::Texture shipThurster0;
         static const sf::Texture shipThurster1;
@@ -16,7 +15,9 @@ class Assets{
         static const sf::Texture asteroid128;
         static const sf::Texture laser;
         static const sf::Texture debris;
+        static const sf::Font millimetre;
     private:
         static const sf::Texture loadTexture(std::string path);
+        static const sf::Font loadFont(std::string path);
 };
 #endif

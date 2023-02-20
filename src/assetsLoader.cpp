@@ -7,6 +7,12 @@ const sf::Texture Assets::loadTexture(std::string path){
     return (*texture);
 }
 
+const sf::Font Assets::loadFont(std::string path){
+    sf::Font * font = new sf::Font();
+    (*font).loadFromFile(path);
+    return (*font);
+}
+
 const sf::Texture Assets::shipTexture = Assets::loadTexture("assets/textures/ship.png");
 const sf::Texture Assets::shipThurster0 = Assets::loadTexture("assets/textures/ship_thruster_0.png");
 const sf::Texture Assets::shipThurster1 = Assets::loadTexture("assets/textures/ship_thruster_1.png");
@@ -17,3 +23,5 @@ const sf::Texture Assets::asteroid64 = Assets::loadTexture("assets/textures/aste
 const sf::Texture Assets::asteroid128 = Assets::loadTexture("assets/textures/asteroid128.png");
 const sf::Texture Assets::laser = Assets::loadTexture("assets/textures/laser.png");
 const sf::Texture Assets::debris = Assets::loadTexture("assets/textures/debris.png");
+
+const sf::Font Assets::millimetre = Assets::loadFont("assets/fonts/Millimetre-Regular.otf");

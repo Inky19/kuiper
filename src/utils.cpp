@@ -1,6 +1,7 @@
 #include <math.h>
 #include <random>
 #include "utils.hpp"
+#include "menu.hpp"
 #include <iostream>
 
 /**
@@ -54,7 +55,7 @@ sf::Vector2f getBorder(float angle, Frame *frame){
 
 Frame::Frame(int size){
     this->size = size;
-    origin = sf::Vector2i(0,0);
+    origin = sf::Vector2i(0, 0);
     border = sf::VertexArray(sf::LineStrip, 5);
     updateBorder();
 }
