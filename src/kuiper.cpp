@@ -18,11 +18,15 @@ int main(){
     World world(&window);
     Frame frame(1000);
     MainMenu mainMenu(&window, &frame);
+    while (window.isOpen() && !mainMenu.isStarting()){
+        sf::Event event;
+        mainMenu.update(&event);
+        //
+    }
     while (window.isOpen()){
         sf::Event event;
         dt = timer.restart().asSeconds();
-        mainMenu.update(&event);
-        //world.update(dt, &event);
+        world.update(dt, &event);
     }
     return 0;
 }

@@ -3,30 +3,23 @@
 
 #include "utils.hpp"
 #include <vector>
-
-class TextElement : public sf::Text {
-    public:
-        TextElement();
-        TextElement(std::string value, float xRelative, float yRelative, float relativeSize);
-        void place(sf::Vector2u windowSize);
-        float getRelativeSize();
-    private:
-        sf::Vector2f relativePosition;
-        float relativeSize;
-};
-
+#include "menuElements.hpp"
 
 class MainMenu {
     public:
         MainMenu(sf::RenderWindow * window, Frame * frame);
         void update(sf::Event * event);
         void render();
+        bool isStarting();
         
     private:
+        bool start;
         Frame * frame;
         sf::Font font;
         sf::RenderWindow * window;
         std::vector<TextElement> texts;
+        std::vector<Button> buttons;
+        std::vector<TextElement*> menuElements;
 };
 
 

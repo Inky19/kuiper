@@ -6,8 +6,10 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/include/entity
+    ${PROJECT_SOURCE_DIR}/include/gui
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/src/entity
+    ${PROJECT_SOURCE_DIR}/src/gui
 )
 
 # Find SFML shared libraries
@@ -16,8 +18,10 @@ find_package(SFML 2.5 COMPONENTS system window graphics audio REQUIRED)
 file(GLOB SRCS
     "${PROJECT_SOURCE_DIR}/include/*.hpp"
     "${PROJECT_SOURCE_DIR}/include/entity/*.hpp"
+    "${PROJECT_SOURCE_DIR}/include/gui/*.hpp"
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
     "${PROJECT_SOURCE_DIR}/src/entity/*.cpp"
+    "${PROJECT_SOURCE_DIR}/src/gui/*.cpp"
 )
 
 add_executable(Kuiper ${SRCS})
