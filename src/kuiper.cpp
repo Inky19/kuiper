@@ -15,13 +15,13 @@ int main(){
     sf::Clock timer;
     float dt = 0;
     sf::RenderWindow window(sf::VideoMode(1000, 1000), "Kuiper");
-    World world(&window);
     Frame frame(1000);
     MainMenu mainMenu(&window, &frame);
+    World world(&window);    
+    
     while (window.isOpen() && !mainMenu.isStarting()){
         sf::Event event;
         mainMenu.update(&event);
-        //
     }
     while (window.isOpen()){
         sf::Event event;

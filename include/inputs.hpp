@@ -3,7 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <functional>
 #include "ship.hpp"
+#include "world.hpp"
 
 class InputProcessor{
     private:

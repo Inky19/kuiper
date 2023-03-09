@@ -4,17 +4,18 @@
 #include "utils.hpp"
 #include <vector>
 #include "menuElements.hpp"
+#include "assetsLoader.hpp"
 
-class MainMenu {
+class Menu {
     public:
-        MainMenu(sf::RenderWindow * window, Frame * frame);
-        void update(sf::Event * event);
-        void render();
-        bool isStarting();
-        
-    private:
-        bool start;
-        Frame * frame;
+        virtual void update(sf::Event * event) = 0;
+        virtual void render();
+        virtual ~Menu() {};
+        void initMenuElements();
+
+    protected:
+        void handleEvent(sf::Event * event);
+        virtual void resize(int width, int height){};
         sf::Font font;
         sf::RenderWindow * window;
         std::vector<TextElement> texts;
@@ -22,6 +23,27 @@ class MainMenu {
         std::vector<TextElement*> menuElements;
 };
 
+class MainMenu : public Menu {
+    public:
+        MainMenu(sf::RenderWindow * window, Frame * frame);
+        void update(sf::Event * event);
+        bool isStarting();
+        void render() override;
+    private:
+        void resize(int width, int height) override;
+        bool start;
+        Frame * frame;
+};
+
+class PauseMenu : public Menu {
+    public:
+        PauseMenu(sf::RenderWindow * window);
+        void update(sf::Event * event);
+        bool isPaused(){return paused;};
+        void pause(){paused = !paused;};
+    private:
+        bool paused;
+};
 
 
 #endif

@@ -1,7 +1,5 @@
 #include "entity.hpp"
 
-Entity::~Entity() {}; // A destructor from a child class also calls destructor from super class (must be defined)
-
 sf::Sprite Entity::getSprite(){
     return sprite;
 }

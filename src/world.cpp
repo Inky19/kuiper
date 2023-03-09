@@ -20,6 +20,8 @@ std::vector<std::vector<std::shared_ptr<Entity>>>  World::Entities::getAllEntiti
 
 World::World(sf::RenderWindow * window){
     this->window = window;    
+    pauseMenu = PauseMenu(window);
+    pauseMenu.initMenuElements();
     std::shared_ptr<Ship> ship = std::make_shared<Ship>(&frame);
     entities.ships.push_back(ship);
     debug = false;
@@ -38,7 +40,6 @@ void World::render(){
             e->render(window, debug);
         }
     }
-    (*window).display();
 }
 
 void World::fire(std::shared_ptr<Ship> * ship){
@@ -47,7 +48,7 @@ void World::fire(std::shared_ptr<Ship> * ship){
     entities.lasers.push_back(laser);
 }
 
-void World::update(float dt, sf::Event * event){
+void World::handleEvent(sf::Event * event){
     while ((*window).pollEvent(*event)){
         switch (event->type){
             case sf::Event::Closed:
@@ -56,6 +57,9 @@ void World::update(float dt, sf::Event * event){
             case sf::Event::KeyPressed:
                 if (event->key.code == sf::Keyboard::F3){
                     debug = !debug;
+                } else if (event->key.code == sf::Keyboard::Escape){
+                    pauseMenu.pause();
+                    break;
                 } else {
                     InputProcessor::keyPressed(event->key.code, &entities.ships);
                 }
@@ -72,20 +76,29 @@ void World::update(float dt, sf::Event * event){
                 break;
             }
     }
+}
 
-    for (std::vector<std::shared_ptr<Entity>> arr : entities.getAllEntities()){
-        for (std::shared_ptr<Entity> e : arr){
-            (*e).update(dt);
+void World::update(float dt, sf::Event * event){
+    if (!pauseMenu.isPaused()){
+        handleEvent(event);
+        for (std::vector<std::shared_ptr<Entity>> arr : entities.getAllEntities()){
+            for (std::shared_ptr<Entity> e : arr){
+                (*e).update(dt);
+            }
         }
+        for (std::shared_ptr<Ship> ship : entities.ships){
+            if(ship->isFiring()){
+                fire(&ship);
+            }
+        }
+        updateEntities();
+        render();
+    } else {
+        render();
+        pauseMenu.update(event);
     }
+    (*window).display();
     
-    for (std::shared_ptr<Ship> ship : entities.ships){
-        if(ship->isFiring()){
-            fire(&ship);
-        }
-    }
-    updateEntities();
-    render();
 }
 
 void World::updateEntities(){

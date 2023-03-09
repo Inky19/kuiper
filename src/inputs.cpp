@@ -1,5 +1,6 @@
 #include <inputs.hpp>
 #include <memory>
+#include <iostream>
 #include "ship.hpp"
 
 void InputProcessor::keyPressed(sf::Keyboard::Key key, std::vector<std::shared_ptr<Ship>> *ships){

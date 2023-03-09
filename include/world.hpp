@@ -10,11 +10,13 @@
 #include "asteroid.hpp"
 #include "laser.hpp"
 #include "debris.hpp"
+#include "menu.hpp"
 
 class World {
     public:
         World(sf::RenderWindow * window);
         void update(float dt, sf::Event * event);
+        void pause(){pauseMenu.pause();};
     private:
 
         class Entities{
@@ -29,9 +31,9 @@ class World {
         bool debug;
         bool over;
         Entities entities;
-        sf::RenderWindow  * window;
+        sf::RenderWindow * window;
         Frame frame = Frame(1000);
-        
+        PauseMenu pauseMenu = PauseMenu(window);
         
         void collisions();
         void render();
@@ -40,6 +42,7 @@ class World {
         void generateAsteroids(int number, int size);
         void generateAsteroids(int number, int size, sf::Vector2f pos);
         void updateEntities();
+        void handleEvent(sf::Event * event);
 
 };
 

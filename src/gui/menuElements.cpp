@@ -19,6 +19,7 @@ TextElement::TextElement(std::string value, float xRelative, float yRelative, fl
  * @param windowSize Size of the window
  */
 void TextElement::place(sf::Vector2u windowSize){
+    
     sf::Vector2f center = { getGlobalBounds().width/2.f, getGlobalBounds().height/2.f};
     sf::Vector2f localBounds = { getLocalBounds().left, getLocalBounds().top};
     setOrigin(center + localBounds);
