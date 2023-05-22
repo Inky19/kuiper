@@ -93,3 +93,14 @@ void Frame::setOrigin(float x, float y){
 sf::VertexArray Frame::getBorder(){
     return border;
 }
+
+void playSound(const sf::SoundBuffer buffer){
+    sf::Sound * sound = new sf::Sound();
+    sound->setBuffer(buffer);
+    sound->play();
+    while(sound->getStatus() == sf::SoundSource::Status::Playing){
+
+    }
+    std::cout << "killed" << std::endl;
+    delete(sound);
+}

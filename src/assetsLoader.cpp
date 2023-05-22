@@ -13,6 +13,12 @@ const sf::Font Assets::loadFont(std::string path){
     return (*font);
 }
 
+const sf::SoundBuffer Assets::loadSound(std::string path){
+    sf::SoundBuffer * sound = new sf::SoundBuffer();
+    (*sound).loadFromFile(path);
+    return (*sound);
+}
+
 const sf::Texture Assets::shipTexture = Assets::loadTexture("assets/textures/ship.png");
 const sf::Texture Assets::shipThurster0 = Assets::loadTexture("assets/textures/ship_thruster_0.png");
 const sf::Texture Assets::shipThurster1 = Assets::loadTexture("assets/textures/ship_thruster_1.png");
@@ -24,4 +30,9 @@ const sf::Texture Assets::asteroid128 = Assets::loadTexture("assets/textures/ast
 const sf::Texture Assets::laser = Assets::loadTexture("assets/textures/laser.png");
 const sf::Texture Assets::debris = Assets::loadTexture("assets/textures/debris.png");
 
+const sf::SoundBuffer Assets::laserFX = Assets::loadSound("assets/fx/laser.ogg");
+const sf::SoundBuffer Assets::deathFX = Assets::loadSound("assets/fx/death.ogg");
+const sf::SoundBuffer Assets::splitFX = Assets::loadSound("assets/fx/split.ogg");
+
 const sf::Font Assets::millimetre = Assets::loadFont("assets/fonts/Millimetre-Regular.otf");
+

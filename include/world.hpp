@@ -31,6 +31,7 @@ class World {
         bool debug;
         bool over;
         Entities entities;
+        std::vector<std::unique_ptr<sf::Sound>> sounds;
         sf::RenderWindow * window;
         Frame frame = Frame(1000);
         PauseMenu pauseMenu = PauseMenu(window);
@@ -43,6 +44,8 @@ class World {
         void generateAsteroids(int number, int size, sf::Vector2f pos);
         void updateEntities();
         void handleEvent(sf::Event * event);
+        void clearSounds();
+        void addSound(const sf::SoundBuffer * buffer);
 
 };
 

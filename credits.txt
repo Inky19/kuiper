@@ -1,0 +1,17 @@
+Sound FX:
+
+"laser.ogg":
+    "8-bit Laser.aif" by timgormly
+    (CC BY 3.0)
+    https://freesound.org/people/timgormly/sounds/170161/
+
+"death.ogg":
+    "8bit_explosion_4.wav" by Soundholder
+    (CC BY 3.0)
+    https://freesound.org/people/Soundholder/sounds/425335/
+
+"split.ogg":
+    "8-bit Explosion2.aif" by timgormly
+    (CC BY 3.0)
+    https://freesound.org/people/timgormly/sounds/170144/
+

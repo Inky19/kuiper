@@ -46,6 +46,7 @@ void World::fire(std::shared_ptr<Ship> * ship){
     std::shared_ptr<Laser> laser = std::make_shared<Laser>((*ship)->getAngle(), (*ship)->getPos(), (*ship)->getSpeedVector(), &frame);
     (*ship)->setFiring(false);
     entities.lasers.push_back(laser);
+    addSound(&Assets::laserFX);
 }
 
 void World::handleEvent(sf::Event * event){
@@ -97,6 +98,7 @@ void World::update(float dt, sf::Event * event){
         render();
         pauseMenu.update(event);
     }
+    clearSounds();
     (*window).display();
     
 }
@@ -120,6 +122,7 @@ void World::collisions(){
         for (std::shared_ptr<Ship> ship : entities.ships){
             if (ship->collide(&(entities.asteroids)[i])){
                 for (int i=0; i<4; i++){
+                    addSound(&Assets::deathFX);
                     std::shared_ptr<Debris> debris = std::make_shared<Debris>(randInt(0, 360), ship->getPos(), ship->getSpeedVector(), &frame);
                     entities.debris.push_back(debris);
                 }
@@ -144,6 +147,7 @@ void World::collisions(){
             entities.asteroids[index]->eraseCollisions(&entities.asteroids[index]);
             entities.asteroids.erase(entities.asteroids.begin() + index);
             entities.asteroids.shrink_to_fit();
+            addSound(&Assets::splitFX);
             collided = false;
         }
     }
@@ -182,5 +186,18 @@ void World::generateAsteroids(int number, int size, sf::Vector2f pos){
         asteroid->setPos(pos);
         entities.asteroids.push_back(asteroid);
     }
+
+}
+
+void World::clearSounds(){
+    std::erase_if(sounds, [](std::unique_ptr<sf::Sound>& sound){return sound->getStatus() == sf::SoundSource::Status::Stopped;});
+    sounds.shrink_to_fit();
+}
+
+void World::addSound(const sf::SoundBuffer * buffer){
+    std::unique_ptr<sf::Sound> sound = std::make_unique<sf::Sound>();
+    sound->setBuffer(*buffer);
+    sounds.push_back(std::move(sound));
+    sounds[sounds.size()-1]->play();
 
 }

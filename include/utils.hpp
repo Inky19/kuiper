@@ -2,6 +2,7 @@
 #define UTILS_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 float degToRad(float angle);
 
@@ -23,4 +24,6 @@ class Frame{
 };
 
 sf::Vector2f getBorder(float angle, Frame *frame);
+
+void playSound(const sf::SoundBuffer buffer);
 #endif
