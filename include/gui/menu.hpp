@@ -41,8 +41,11 @@ class PauseMenu : public Menu {
         void update(sf::Event * event);
         bool isPaused(){return paused;};
         void pause(){paused = !paused;};
+        bool isExit(){return exit;};
+        void setExit(bool exit){this->exit = exit;};
     private:
         bool paused;
+        bool exit;
 };
 
 

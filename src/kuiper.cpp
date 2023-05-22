@@ -17,12 +17,15 @@ int main(){
     sf::RenderWindow window(sf::VideoMode(1000, 1000), "Kuiper");
     Frame frame(1000);
     MainMenu mainMenu(&window, &frame);
-    World world(&window);    
+     
     
     while (window.isOpen() && !mainMenu.isStarting()){
         sf::Event event;
         mainMenu.update(&event);
     }
+
+    World world(&window);  
+
     while (window.isOpen()){
         sf::Event event;
         dt = timer.restart().asSeconds();

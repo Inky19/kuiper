@@ -19,9 +19,11 @@ std::vector<std::vector<std::shared_ptr<Entity>>>  World::Entities::getAllEntiti
 }
 
 World::World(sf::RenderWindow * window){
-    this->window = window;    
+    this->window = window;   
+    initFrame(); 
     pauseMenu = PauseMenu(window);
     pauseMenu.initMenuElements();
+    
     std::shared_ptr<Ship> ship = std::make_shared<Ship>(&frame);
     entities.ships.push_back(ship);
     debug = false;
@@ -29,12 +31,22 @@ World::World(sf::RenderWindow * window){
     generateAsteroids();
 }
 
+void World::reset(){
+    entities.asteroids.erase(entities.asteroids.begin(), entities.asteroids.end());
+    entities.debris.erase(entities.debris.begin(), entities.debris.end());
+    entities.ships.erase(entities.ships.begin(), entities.ships.end());
+    std::shared_ptr<Ship> ship = std::make_shared<Ship>(&frame);
+    entities.ships.push_back(ship);
+    initFrame(); 
+    generateAsteroids();
+    pauseMenu.setExit(false);
+    pauseMenu.pause();
+}
+
 void World::render(){
-    (*window).clear();
-        
+    (*window).clear();    
     (*window).draw(frame.getBorder());
-    
-    
+
     for (std::vector<std::shared_ptr<Entity>> arr : entities.getAllEntities()){
         for (std::shared_ptr<Entity> e : arr){
             e->render(window, debug);
@@ -69,14 +81,18 @@ void World::handleEvent(sf::Event * event){
                 InputProcessor::keyReleased(event->key.code, &entities.ships);
                 break;
             case sf::Event::Resized:
-                sf::FloatRect visibleArea(0, 0, event->size.width, event->size.height);
-                float size = std::min(event->size.width, event->size.height);
-                frame.setSize(size);
-                (*window).setView(sf::View(visibleArea));
-                frame.setOrigin((event->size.width-size)/2,(event->size.height-size)/2);
+                initFrame();
                 break;
             }
     }
+}
+
+void World::initFrame(){
+    sf::FloatRect visibleArea(0, 0, window->getSize().x, window->getSize().y);
+    float size = std::min(window->getSize().x, window->getSize().y);
+    frame.setSize(size);
+    (*window).setView(sf::View(visibleArea));
+    frame.setOrigin((window->getSize().x-frame.getSize())/2,(window->getSize().y-frame.getSize())/2);
 }
 
 void World::update(float dt, sf::Event * event){
@@ -100,6 +116,9 @@ void World::update(float dt, sf::Event * event){
     }
     clearSounds();
     (*window).display();
+    if (pauseMenu.isExit()){
+        reset();
+    }
     
 }
 

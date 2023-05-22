@@ -15,6 +15,7 @@
 class World {
     public:
         World(sf::RenderWindow * window);
+        void init();
         void update(float dt, sf::Event * event);
         void pause(){pauseMenu.pause();};
     private:
@@ -46,6 +47,8 @@ class World {
         void handleEvent(sf::Event * event);
         void clearSounds();
         void addSound(const sf::SoundBuffer * buffer);
+        void reset();
+        void initFrame();
 
 };
 

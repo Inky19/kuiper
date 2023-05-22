@@ -70,10 +70,9 @@ MainMenu::MainMenu(sf::RenderWindow * window, Frame * frame){
     texts[0] = TextElement("Kuiper", 0.5, 0.2, 0.1);
     menuElements.push_back(&texts[0]);
     
-    buttons.resize(3);
+    buttons.resize(2);
     buttons[0] = Button("Play", 0.5, 0.5, 0.05);
-    buttons[1] = Button("Options", 0.5, 0.7, 0.05);
-    buttons[2] = Button("Quit", 0.5, 0.9, 0.05);
+    buttons[1] = Button("Quit", 0.5, 0.7, 0.05);
 
     for (int i=0; i<buttons.size(); i++){
         menuElements.push_back(&buttons[i]);
@@ -97,11 +96,8 @@ void MainMenu::update(sf::Event * event){
         start = true;
         buttons[0].setClicked(false);
     } else if (buttons[1].isClicked()){
-        std::cout << "UwU" << std::endl;
-        buttons[1].setClicked(false);
-    } else if (buttons[2].isClicked()){
         window->close();
-        buttons[2].setClicked(false);
+        buttons[1].setClicked(false);
     }
 }
 
@@ -119,13 +115,14 @@ bool MainMenu::isStarting(){
 PauseMenu::PauseMenu(sf::RenderWindow * window){
     this->window = window;
     paused = false;
+    exit = false;
     font = Assets::millimetre;
     texts.resize(1);
     texts[0] = TextElement("Pause", 0.5, 0.2, 0.1);
     
     buttons.resize(2);
     buttons[0] = Button("Continue", 0.5, 0.5, 0.05);
-    buttons[1] = Button("Main menu", 0.5, 0.7, 0.05);
+    buttons[1] = Button("Retry", 0.5, 0.7, 0.05);
 
     for (int i=0; i<buttons.size(); i++){
         buttons[i].setFont(font);
@@ -145,7 +142,7 @@ void PauseMenu::update(sf::Event * event){
         paused = false;
         buttons[0].setClicked(false);
     } else if (buttons[1].isClicked()){
-        std::cout << "OwO" << std::endl;
+        exit = true;
         buttons[1].setClicked(false);
     }
 }
