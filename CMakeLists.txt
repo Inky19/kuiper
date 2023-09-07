@@ -13,7 +13,7 @@ include_directories(
 )
 
 # Find SFML shared libraries
-find_package(SFML 2.5 COMPONENTS system window graphics audio REQUIRED)
+find_package(SFML 2.5...<3.0 COMPONENTS system window graphics audio REQUIRED)
 
 file(GLOB SRCS
     "${PROJECT_SOURCE_DIR}/include/*.hpp"
