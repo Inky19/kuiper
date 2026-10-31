@@ -6,10 +6,11 @@
 
 class Entity : public sf::Transformable{
     protected:
+        Entity(const sf::Texture& texture);
         float mass;
         sf::Vector2f pos;
         float speed;
-        float angle;
+        sf::Angle angle;
         sf::Sprite sprite;
         Frame *frame;
         sf::CircleShape hitbox;
@@ -23,8 +24,8 @@ class Entity : public sf::Transformable{
         virtual void render(sf::RenderWindow * window, bool debug = false) = 0;
         sf::Vector2f getPos();
         sf::Sprite getSprite();
-        float getAngle();
-        void setAngle(float angle);
+        sf::Angle getAngle();
+        void setAngle(sf::Angle angle);
         void setPos(sf::Vector2f pos);
 };
 

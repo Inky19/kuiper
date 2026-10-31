@@ -8,13 +8,13 @@
 
 class Menu {
     public:
-        virtual void update(sf::Event * event) = 0;
+        virtual void update() = 0;
         virtual void render();
         virtual ~Menu() {};
         void initMenuElements();
 
     protected:
-        void handleEvent(sf::Event * event);
+        void handleEvent(std::optional<sf::Event> event);
         virtual void resize(int width, int height){};
         sf::Font font;
         sf::RenderWindow * window;
@@ -26,7 +26,7 @@ class Menu {
 class MainMenu : public Menu {
     public:
         MainMenu(sf::RenderWindow * window, Frame * frame);
-        void update(sf::Event * event);
+        void update();
         bool isStarting();
         void render() override;
     private:
@@ -38,7 +38,7 @@ class MainMenu : public Menu {
 class PauseMenu : public Menu {
     public:
         PauseMenu(sf::RenderWindow * window);
-        void update(sf::Event * event);
+        void update();
         bool isPaused(){return paused;};
         void pause(){paused = !paused;};
         bool isExit(){return exit;};

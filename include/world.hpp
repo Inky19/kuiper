@@ -16,7 +16,7 @@ class World {
     public:
         World(sf::RenderWindow * window);
         void init();
-        void update(float dt, sf::Event * event);
+        void update(float dt);
         void pause(){pauseMenu.pause();};
     private:
 
@@ -44,7 +44,7 @@ class World {
         void generateAsteroids(int number, int size);
         void generateAsteroids(int number, int size, sf::Vector2f pos);
         void updateEntities();
-        void handleEvent(sf::Event * event);
+        void handleEvent();
         void clearSounds();
         void addSound(const sf::SoundBuffer * buffer);
         void reset();

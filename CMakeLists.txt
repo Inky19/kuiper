@@ -13,7 +13,7 @@ include_directories(
 )
 
 # Find SFML shared libraries
-find_package(SFML 2.5...<3.0 COMPONENTS system window graphics audio REQUIRED)
+find_package(SFML 3.1...<4.0 COMPONENTS System Window Graphics Audio REQUIRED)
 
 file(GLOB SRCS
     "${PROJECT_SOURCE_DIR}/include/*.hpp"
@@ -25,7 +25,7 @@ file(GLOB SRCS
 )
 
 add_executable(Kuiper ${SRCS})
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-graphics sfml-system sfml-audio)
+target_link_libraries(${PROJECT_NAME} sfml-window sfml-graphics sfml-system sfml-audio)
 
 add_custom_target(copy_assets
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_LIST_DIR}/copy-assets.cmake

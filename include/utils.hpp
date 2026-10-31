@@ -23,7 +23,7 @@ class Frame{
         sf::VertexArray getBorder();
 };
 
-sf::Vector2f getBorder(float angle, Frame *frame);
+sf::Vector2f getBorder(sf::Angle angle, Frame *frame);
 
 void playSound(const sf::SoundBuffer buffer);
 #endif

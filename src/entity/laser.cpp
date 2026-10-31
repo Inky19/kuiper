@@ -7,18 +7,17 @@
 #include "asteroid.hpp"
 #include <iostream>
 
-Laser::Laser(float angle, sf::Vector2f pos, sf::Vector2f initialSpeed, Frame * frame){
+Laser::Laser(sf::Angle angle, sf::Vector2f pos, sf::Vector2f initialSpeed, Frame * frame) : Entity::Entity(Assets::laser){
     this->frame = frame;
     this->angle = angle;
     this->pos = pos;
-    tip.x = 8*sin(degToRad(angle));
-    tip.y = -8*cos(degToRad(angle));
+    tip.x = 8*sin(angle.asRadians());
+    tip.y = -8*cos(angle.asRadians());
     v0x = initialSpeed.x;
     v0y = initialSpeed.y;
     life = 0;
     expired = false;
-    sprite.setOrigin(8,8);
-    sprite.setTexture(Assets::laser);
+    sprite.setOrigin({8, 8});
     sprite.setRotation(angle);
     sprite.setPosition(pos);
     this->speed = 500;
@@ -26,13 +25,13 @@ Laser::Laser(float angle, sf::Vector2f pos, sf::Vector2f initialSpeed, Frame * f
     hitbox = sf::CircleShape(6);
     hitbox.setFillColor(sf::Color(128,255,255,128));
     hitbox.setOutlineThickness(0);
-    hitbox.setOrigin(6,6);
+    hitbox.setOrigin({6, 6});
 }
 
 void Laser::update(float dt){
     // Update position
-    pos.x += (v0x+speed*sin(degToRad(angle)))*dt;
-    pos.y += (v0y-speed*cos(degToRad(angle)))*dt;
+    pos.x += (v0x+speed*sin(angle.asRadians()))*dt;
+    pos.y += (v0y-speed*cos(angle.asRadians()))*dt;
 
     life += dt;
     if (life > maxLife){

@@ -16,7 +16,7 @@ class Laser : public Entity{
         float life;
         bool expired;
     public:
-        Laser(float angle, sf::Vector2f pos, sf::Vector2f initialSpeed, Frame * frame);
+        Laser(sf::Angle angle, sf::Vector2f pos, sf::Vector2f initialSpeed, Frame * frame);
         void update(float dt);
         void render(sf::RenderWindow * window, bool debug = false);
         bool isExpired();

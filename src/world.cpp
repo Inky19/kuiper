@@ -61,43 +61,38 @@ void World::fire(std::shared_ptr<Ship> * ship){
     addSound(&Assets::laserFX);
 }
 
-void World::handleEvent(sf::Event * event){
-    while ((*window).pollEvent(*event)){
-        switch (event->type){
-            case sf::Event::Closed:
-                window->close();
+void World::handleEvent(){
+    while (const std::optional event = window->pollEvent()){
+        if (event->is<sf::Event::Closed>()) {
+            window->close();
+        } else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+            if (keyPressed->scancode == sf::Keyboard::Scancode::F3){
+                debug = !debug;
+            } else if (keyPressed->scancode == sf::Keyboard::Scancode::Escape){
+                pauseMenu.pause();
                 break;
-            case sf::Event::KeyPressed:
-                if (event->key.code == sf::Keyboard::F3){
-                    debug = !debug;
-                } else if (event->key.code == sf::Keyboard::Escape){
-                    pauseMenu.pause();
-                    break;
-                } else {
-                    InputProcessor::keyPressed(event->key.code, &entities.ships);
-                }
-                break;
-            case sf::Event::KeyReleased:
-                InputProcessor::keyReleased(event->key.code, &entities.ships);
-                break;
-            case sf::Event::Resized:
-                initFrame();
-                break;
+            } else {
+                InputProcessor::keyPressed(keyPressed->scancode, &entities.ships);
             }
+        } else if (const auto* keyReleased = event->getIf<sf::Event::KeyReleased>()) {
+            InputProcessor::keyReleased(keyReleased->scancode, &entities.ships);
+        } else if (event->is<sf::Event::Resized>()) {
+            initFrame();
+        }
     }
 }
 
 void World::initFrame(){
-    sf::FloatRect visibleArea(0, 0, window->getSize().x, window->getSize().y);
+    sf::FloatRect visibleArea({0, 0}, {static_cast<float>(window->getSize().x), static_cast<float>(window->getSize().y)});
     float size = std::min(window->getSize().x, window->getSize().y);
     frame.setSize(size);
     (*window).setView(sf::View(visibleArea));
     frame.setOrigin((window->getSize().x-frame.getSize())/2,(window->getSize().y-frame.getSize())/2);
 }
 
-void World::update(float dt, sf::Event * event){
+void World::update(float dt){
     if (!pauseMenu.isPaused()){
-        handleEvent(event);
+        handleEvent();
         for (std::vector<std::shared_ptr<Entity>> arr : entities.getAllEntities()){
             for (std::shared_ptr<Entity> e : arr){
                 (*e).update(dt);
@@ -112,7 +107,7 @@ void World::update(float dt, sf::Event * event){
         render();
     } else {
         render();
-        pauseMenu.update(event);
+        pauseMenu.update();
     }
     clearSounds();
     (*window).display();
@@ -142,7 +137,7 @@ void World::collisions(){
             if (ship->collide(&(entities.asteroids)[i])){
                 for (int i=0; i<4; i++){
                     addSound(&Assets::deathFX);
-                    std::shared_ptr<Debris> debris = std::make_shared<Debris>(randInt(0, 360), ship->getPos(), ship->getSpeedVector(), &frame);
+                    std::shared_ptr<Debris> debris = std::make_shared<Debris>(sf::degrees(randInt(0, 360)), ship->getPos(), ship->getSpeedVector(), &frame);
                     entities.debris.push_back(debris);
                 }
             };
@@ -214,9 +209,7 @@ void World::clearSounds(){
 }
 
 void World::addSound(const sf::SoundBuffer * buffer){
-    std::unique_ptr<sf::Sound> sound = std::make_unique<sf::Sound>();
-    sound->setBuffer(*buffer);
+    std::unique_ptr<sf::Sound> sound = std::make_unique<sf::Sound>(*buffer);
     sounds.push_back(std::move(sound));
     sounds[sounds.size()-1]->play();
-
 }

@@ -14,22 +14,20 @@
 int main(){
     sf::Clock timer;
     float dt = 0;
-    sf::RenderWindow window(sf::VideoMode(1000, 1000), "Kuiper");
+    sf::RenderWindow window(sf::VideoMode({1000, 1000}), "Kuiper");
     Frame frame(1000);
     MainMenu mainMenu(&window, &frame);
      
     
     while (window.isOpen() && !mainMenu.isStarting()){
-        sf::Event event;
-        mainMenu.update(&event);
+        mainMenu.update();
     }
 
     World world(&window);  
 
     while (window.isOpen()){
-        sf::Event event;
         dt = timer.restart().asSeconds();
-        world.update(dt, &event);
+        world.update(dt);
     }
     return 0;
 }

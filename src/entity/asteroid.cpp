@@ -11,7 +11,7 @@
  * @param m Mass of the asteroid. Used to determine its size.
  * @param frame Pointer of the frame where the asteroid will be placed.
 */
-Asteroid::Asteroid(int m, Frame *frame){
+Asteroid::Asteroid(int m, Frame *frame) : Entity::Entity(Asteroid::getAsteroidTexture(m)){
     this->frame = frame;
     mass = m;
     size = 32;
@@ -20,26 +20,34 @@ Asteroid::Asteroid(int m, Frame *frame){
     // These values need to be the same as the one in the texture files.
     if (m <= 32){
         size = 32;
-        sprite.setTexture(Assets::asteroid32);
     } else if (m <= 64){
         size = 64;
-        sprite.setTexture(Assets::asteroid64);
     } else {
         size = 128;
-        sprite.setTexture(Assets::asteroid128);
     }
     
     hitbox = sf::CircleShape(size/2);
     hitbox.setFillColor(sf::Color(255,0,0,128));
     hitbox.setOutlineThickness(0);
-    sprite.setOrigin(size/2,size/2);
-    hitbox.setOrigin(size/2,size/2);
-    angle = randInt(0,359);
-    spriteAngle = randInt(0,359);
+    sprite.setOrigin({size/2.0f, size/2.0f});
+    hitbox.setOrigin({size/2.0f, size/2.0f});
+    angle = sf::degrees(randInt(0,359));
+    spriteAngle = sf::degrees(randInt(0,359));
     speed = 100;
     pos = getBorder(angle, frame); // The asteroid is placed at the border of the frame at the start of the game.
 
     sprite.setRotation(spriteAngle);
+}
+
+const sf::Texture& Asteroid::getAsteroidTexture(int size) {
+    // The size of the asteroid can have 3 values, depending of its mass.
+    // These values need to be the same as the one in the texture files.
+    if (size <= 32){
+        return Assets::asteroid32;
+    } else if (size <= 64){
+        return Assets::asteroid64;
+    } 
+    return Assets::asteroid128;
 }
 
 /**
@@ -49,11 +57,11 @@ Asteroid::Asteroid(int m, Frame *frame){
 */
 void Asteroid::update(float dt){
     // Update position
-    pos.x += speed*sin(degToRad(angle))*dt;
-    pos.y += -speed*cos(degToRad(angle))*dt;
+    pos.x += speed*sin(angle.asRadians())*dt;
+    pos.y += -speed*cos(angle.asRadians())*dt;
     
     // Update sprite rotation
-    spriteAngle = fmod(spriteAngle + dt*20, 360);
+    spriteAngle = sf::degrees(fmod(spriteAngle.asDegrees() + dt*20, 360));
     sprite.setRotation(spriteAngle);
 
     setInFrame(); // Place the asteroid inside the frame's borders.
@@ -110,7 +118,7 @@ void Asteroid::collide(std::shared_ptr<Asteroid> * asteroid1, std::shared_ptr<As
             (*asteroid2)-> addCollision(asteroid1);
 
             //TODO: Direction is simply swaped. COULD BE REDONE WITH BETTER PHYSICS ACCOUNTING FOR ANGLE OF IMPACT
-            float tempAngle = (*asteroid1)->getAngle();
+            sf::Angle tempAngle = (*asteroid1)->getAngle();
             (*asteroid1)->setAngle((*asteroid2)->getAngle());
             (*asteroid2)->setAngle(tempAngle);
         }

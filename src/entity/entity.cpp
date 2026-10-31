@@ -1,5 +1,7 @@
 #include "entity.hpp"
 
+Entity::Entity(const sf::Texture& texture) : sprite(texture) {}
+
 sf::Sprite Entity::getSprite(){
     return sprite;
 }
@@ -29,10 +31,10 @@ void Entity::setPos(sf::Vector2f pos){
     this->pos = pos;
 }
 
-float Entity::getAngle(){
+sf::Angle Entity::getAngle(){
     return angle;
 }
 
-void Entity::setAngle(float angle){
+void Entity::setAngle(sf::Angle angle){
     this->angle = angle;
 }

@@ -35,28 +35,28 @@ int randInt(int lower, int upper){
  * @param frame Raw pointer of the frame
  * @return Position on at the edge of the frame
 */
-sf::Vector2f getBorder(float angle, Frame *frame){
+sf::Vector2f getBorder(sf::Angle angle, Frame *frame){
     // The frame is delimited in 4 zones forming an X with the upper left segment as the origin for the angle.
     // The coordinate system must therefore be inclined by 45°:
-    float refAngle = fmod((angle + 45), 360); 
+    float refAngle = fmod((angle.asDegrees() + 45), 360); 
 
     int size = (*frame).getSize();
     // Formula for each zone:
     if (refAngle <= 90){
-        return sf::Vector2f((size/2)*(1+tan(degToRad(angle))),0);
+        return sf::Vector2f((size/2)*(1+tan(angle.asRadians())),0);
     } else if (refAngle <= 180){
-        return sf::Vector2f(size,(size/2)*(1-tan(degToRad(90-angle))));
+        return sf::Vector2f(size,(size/2)*(1-tan(degToRad(90-angle.asDegrees()))));
     } else if (refAngle <= 270){
-        return sf::Vector2f((size/2)*(1-tan(degToRad(angle))),size);
+        return sf::Vector2f((size/2)*(1-tan(angle.asRadians())),size);
     } else {
-        return sf::Vector2f(0,(size/2)*(1+tan(degToRad(270-angle))));
+        return sf::Vector2f(0,(size/2)*(1+tan(degToRad(270-angle.asDegrees()))));
     }
 }
 
 Frame::Frame(int size){
     this->size = size;
     origin = sf::Vector2i(0, 0);
-    border = sf::VertexArray(sf::LineStrip, 5);
+    border = sf::VertexArray(sf::PrimitiveType::LineStrip, 5);
     updateBorder();
 }
 
@@ -95,12 +95,9 @@ sf::VertexArray Frame::getBorder(){
 }
 
 void playSound(const sf::SoundBuffer buffer){
-    sf::Sound * sound = new sf::Sound();
-    sound->setBuffer(buffer);
-    sound->play();
-    while(sound->getStatus() == sf::SoundSource::Status::Playing){
-
+    sf::Sound sound(buffer);
+    sound.play();
+    while(sound.getStatus() == sf::SoundSource::Status::Playing){
     }
     std::cout << "killed" << std::endl;
-    delete(sound);
 }

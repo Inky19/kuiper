@@ -7,7 +7,8 @@
 
 class Asteroid : public Entity{
     private:
-        float spriteAngle; // Angle of the sprite used to make the asteroid rotate
+        sf::Angle spriteAngle; // Angle of the sprite used to make the asteroid rotate
+        static const sf::Texture& getAsteroidTexture(int size);
         
         std::vector<std::weak_ptr<Asteroid>> ongoingCollisions; // Current collisions (a collision can last multiple frames)
     public:

@@ -1,21 +1,28 @@
 #include "assetsLoader.hpp"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 const sf::Texture Assets::loadTexture(std::string path){
     sf::Texture * texture = new sf::Texture();
-    (*texture).loadFromFile(path);
+    if (!(*texture).loadFromFile(path)) {
+        std::cout << "Failed to load texture: " << path << std::endl;
+    }
     return (*texture);
 }
 
 const sf::Font Assets::loadFont(std::string path){
     sf::Font * font = new sf::Font();
-    (*font).loadFromFile(path);
+    if (!(*font).openFromFile(path)) {
+        std::cout << "Failed to load font: " << path << std::endl;
+    }
     return (*font);
 }
 
 const sf::SoundBuffer Assets::loadSound(std::string path){
     sf::SoundBuffer * sound = new sf::SoundBuffer();
-    (*sound).loadFromFile(path);
+    if (!(*sound).loadFromFile(path)) {
+        std::cout << "Failed to load sound: " << path << std::endl;
+    }
     return (*sound);
 }
 

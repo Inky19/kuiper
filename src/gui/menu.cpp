@@ -13,36 +13,30 @@ void Menu::render(){
     }
 }
 
-void Menu::handleEvent(sf::Event * event){
+void Menu::handleEvent(std::optional<sf::Event> event){
     float size;
     sf::FloatRect visibleArea;
-    switch (event->type){
-        case sf::Event::Closed:
-            window->close();
-            break;
-        case sf::Event::Resized:
-            visibleArea = sf::FloatRect(0, 0, event->size.width, event->size.height);
-            size = std::min(event->size.width, event->size.height);
-            this->resize(event->size.width, event->size.height);
-            
-            (window)->setView(sf::View(visibleArea));
-            for (int i=0; i<menuElements.size(); i++){
-                menuElements[i]->setCharacterSize(size*menuElements[i]->getRelativeSize());
-                menuElements[i]->place(window->getSize());
-            }
-            break;
-        case sf::Event::MouseMoved:
-            for (int i=0; i<buttons.size(); i++){
-                buttons[i].updateCursor(sf::Mouse::getPosition(*window), false);
-            }
-            break;
-        case sf::Event::MouseButtonPressed:
-            for (int i=0; i<buttons.size(); i++){
-                    buttons[i].updateCursor(sf::Mouse::getPosition(*window), sf::Mouse::isButtonPressed(sf::Mouse::Button::Left));
-                }
-            break;
+    if (event->is<sf::Event::Closed>()) {
+        window->close();
+    } else if (const auto* resized = event->getIf<sf::Event::Resized>()) {
+        visibleArea = sf::FloatRect({0, 0}, {static_cast<float>(resized->size.x), static_cast<float>(resized->size.y)});
+        size = std::min(resized->size.x, resized->size.y);
+        this->resize(resized->size.x, resized->size.y);
+        
+        (window)->setView(sf::View(visibleArea));
+        for (int i=0; i<menuElements.size(); i++){
+            menuElements[i]->setCharacterSize(size*menuElements[i]->getRelativeSize());
+            menuElements[i]->place(window->getSize());
+        }
+    } else if (event->is<sf::Event::MouseMoved>()) {
+        for (int i=0; i<buttons.size(); i++){
+            buttons[i].updateCursor(sf::Mouse::getPosition(*window), false);
+        }
+    } else if (event->is<sf::Event::MouseButtonPressed>()) {
+        for (int i=0; i<buttons.size(); i++){
+            buttons[i].updateCursor(sf::Mouse::getPosition(*window), sf::Mouse::isButtonPressed(sf::Mouse::Button::Left));
+        }
     }
-    
 }
 
 void Menu::initMenuElements(){
@@ -86,8 +80,8 @@ void MainMenu::resize(int width, int height){
     frame->setOrigin((width-frameSize)/2,(height-frameSize)/2);
 }
 
-void MainMenu::update(sf::Event * event){
-    while ((*window).pollEvent(*event)){
+void MainMenu::update(){
+    while (const std::optional event = window->pollEvent()){
         handleEvent(event);
     }
 
@@ -129,10 +123,12 @@ PauseMenu::PauseMenu(sf::RenderWindow * window){
     }
 }
 
-void PauseMenu::update(sf::Event * event){
-    while ((*window).pollEvent(*event)){
-        if (event->type == sf::Event::KeyPressed && event->key.code == sf::Keyboard::Key::Escape){
-            paused = !paused;
+void PauseMenu::update(){
+    while (const std::optional event = window->pollEvent()){
+        if (const auto * keyPressed = event->getIf<sf::Event::KeyPressed>()){
+            if (keyPressed->scancode == sf::Keyboard::Scancode::Escape) {
+                paused = !paused;
+            }
         } else {
             handleEvent(event);
         }
